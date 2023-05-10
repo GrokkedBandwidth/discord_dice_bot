@@ -20,7 +20,7 @@ async def on_ready():
         f'{bot.user.name} is connected to the following guild:\n'
         f'{guild.name}(id: {guild.id}'
     )
-@bot.command(name='roll_dice',
+@bot.command(name='roll',
              help='Roll any sided dice. Examples: \n'
                   '!roll_dice 3 6: Rolls 3 d6\n'
                   '!roll_dice 1 20: Rolls 1 d20')
