@@ -30,6 +30,19 @@ async def roll(ctx,
     ]
     await ctx.send(', '.join(dice))
 
+@bot.command(name='rollmod',
+             help="ex: !rollmod 20 3 (This rolls 1 d20 with +3 modifier")
+async def rollmod(ctx,
+                  number_of_sides: int = commands.parameter(description="Number of sides of the dice being rolled"),
+                  mod: int = commands.parameter(description="Modifier number for the dice being rolled")):
+    if mod < 0:
+        mod_symbol = ""
+    else:
+        mod_symbol = "+"
+    unmod_dice = str(random.choice(range(1, number_of_sides + 1)))
+    mod_dice = int(unmod_dice) + mod
+    await ctx.send(f'Roll: {unmod_dice}\n {mod_dice} with {mod_symbol}{mod}')
+
 
 
 bot.run(TOKEN)
