@@ -12,18 +12,15 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-@bot.event
-async def on_ready():
-    guild = discord.utils.get(bot.guilds, name=GUILD)
-
-    print(
-        f'{bot.user.name} is connected to the following guild:\n'
-        f'{guild.name}(id: {guild.id}'
-    )
+# @bot.event
+# async def on_ready():
+    # guild = discord.utils.get(bot.guilds, name=GUILD)
+    # print(
+    #     f'{bot.user.name} is connected to the following guild:\n'
+    #     f'{guild.name}(id: {guild.id}'
+    # )
 @bot.command(name='roll',
-             help='Roll any sided dice. Examples: \n'
-                  '!roll_dice 3 6: Rolls 3 d6\n'
-                  '!roll_dice 1 20: Rolls 1 d20')
+             help="ex: !roll 1 20 (This rolls 1 d20)")
 async def roll(ctx,
                number_of_dice: int = commands.parameter(description="Number of dice you want to roll"),
                number_of_sides: int = commands.parameter(description="Number of sides of the dice being rolled: i.e. 20 = d20")):
@@ -32,6 +29,7 @@ async def roll(ctx,
         for _ in range(number_of_dice)
     ]
     await ctx.send(', '.join(dice))
+
 
 
 bot.run(TOKEN)
