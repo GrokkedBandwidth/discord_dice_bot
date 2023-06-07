@@ -12,13 +12,6 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-# @bot.event
-# async def on_ready():
-    # guild = discord.utils.get(bot.guilds, name=GUILD)
-    # print(
-    #     f'{bot.user.name} is connected to the following guild:\n'
-    #     f'{guild.name}(id: {guild.id}'
-    # )
 @bot.command(name='roll',
              help="ex: !roll 1 20 (This rolls 1 d20)")
 async def roll(ctx,
@@ -41,8 +34,6 @@ async def rollmod(ctx,
         mod_symbol = "+"
     unmod_dice = str(random.choice(range(1, number_of_sides + 1)))
     mod_dice = int(unmod_dice) + mod
-    await ctx.send(f'Roll: {unmod_dice}\n {mod_dice} with {mod_symbol}{mod}')
-
-
+    await ctx.send(f'{ctx.author.name} rolled a {mod_dice}\n {unmod_dice} with {mod_symbol}{mod} modifier')
 
 bot.run(TOKEN)
