@@ -21,7 +21,8 @@ async def roll(ctx,
         str(random.choice(range(1, number_of_sides + 1)))
         for _ in range(number_of_dice)
     ]
-    await ctx.send(', '.join(dice))
+    dice = ', '.join(dice)
+    await ctx.send(f'{ctx.author.name} rolled {dice}')
 
 @bot.command(name='rollmod',
              help="ex: !rollmod 20 3 (This rolls 1 d20 with +3 modifier")
