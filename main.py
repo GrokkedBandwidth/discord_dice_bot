@@ -30,7 +30,7 @@ async def roll(ctx,
     if args:
         modifier += int(args[0])
 
-    await ctx.send(f'{ctx.author.name} rolled {dice}\n'
+    await ctx.send(f'{ctx.author.display_name} rolled {dice}\n'
                    f'Dice Total: {sum_dice}\n'
                    f'Modified Total: {sum_dice + modifier}')
 
@@ -45,6 +45,6 @@ async def rollmod(ctx,
         mod_symbol = "+"
     unmod_dice = str(random.choice(range(1, number_of_sides + 1)))
     mod_dice = int(unmod_dice) + mod
-    await ctx.send(f'{ctx.author.name} rolled a {mod_dice}\n {unmod_dice} with {mod_symbol}{mod} modifier')
+    await ctx.send(f'{ctx.author.display_name} rolled a {mod_dice}\n {unmod_dice} with {mod_symbol}{mod} modifier')
 
 bot.run(TOKEN)
