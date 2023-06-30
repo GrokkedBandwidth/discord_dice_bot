@@ -12,6 +12,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
+
 @bot.command(name='roll',
              help="ex: !roll 1 20 (This rolls 1 d20)\n"
                   "ex: !roll 4 6 3 (This rolls 4d6 with a +7 modifier)")
@@ -179,7 +180,7 @@ async def d20(ctx, *args):
         await ctx.send(f'{ctx.author.display_name} rolled: {dice}\nTotal: {mod_total} with {sign}{modifier} modifier')
 
 @bot.command(name='d100',
-             help="!d100 (Rolls 1 d100)\n!d100 2 (Rolls 2 d100)\n!d100 100 5 (Rolls 100 d100 with +5 mod)")
+             help="!d100 (Rolls 1 d100)\n!d100 2 (Rolls 2 d100)\n!d100 100 5 (Rolls 100 d100 with +5 mod)",)
 async def d100(ctx, *args):
     result = dice_math(100, *args)
     dice = result[0]
@@ -195,5 +196,12 @@ async def d100(ctx, *args):
         await ctx.send(f'{ctx.author.display_name} rolled: {dice}\nTotal: {total}')
     else:
         await ctx.send(f'{ctx.author.display_name} rolled: {dice}\nTotal: {mod_total} with {sign}{modifier} modifier')
+
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.send(f'{error}')
+        await ctx.send('!help')
+
 
 bot.run(TOKEN)
