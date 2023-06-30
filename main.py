@@ -17,7 +17,7 @@ bot = commands.Bot(command_prefix='!', intents=intents)
                   "ex: !roll 4 6 3 (This rolls 4d6 with a +7 modifier)")
 async def roll(ctx,
                number_of_dice: int = commands.parameter(description="Number of dice you want to roll"),
-               number_of_sides: int = commands.parameter(description="Number of sides of the dice being rolled: i.e. 20 = d20",), *args):
+               number_of_sides: int = commands.parameter(description="Number of sides of the dice being rolled: i.e. 20 = d20"), *args):
     dice = [
         str(random.choice(range(1, number_of_sides + 1)))
         for _ in range(number_of_dice)
@@ -72,7 +72,7 @@ def dice_math(num_side, *args):
 
 @bot.command(name='d3',
              help="!d3 (Rolls 1 d3)\n!d3 2 (Rolls 2 d3)\n!d3 3 5 (Rolls 3 d3 with +5 mod)")
-async def d8(ctx, *args):
+async def d3(ctx, *args):
     result = dice_math(3, *args)
     dice = result[0]
     total = result[1]
@@ -89,8 +89,8 @@ async def d8(ctx, *args):
         await ctx.send(f'{ctx.author.display_name} rolled: {dice}\nTotal: {mod_total} with {sign}{modifier} modifier')
 
 @bot.command(name='d6',
-             help="!d6")
-async def d8(ctx, *args):
+             help="!d6 (Rolls 1 d6)\n!d6 2 (Rolls 2 d6)\n!d6 6 5 (Rolls 6 d6 with +5 mod)")
+async def d6(ctx, *args):
     result = dice_math(6, *args)
     dice = result[0]
     total = result[1]
@@ -107,7 +107,7 @@ async def d8(ctx, *args):
         await ctx.send(f'{ctx.author.display_name} rolled: {dice}\nTotal: {mod_total} with {sign}{modifier} modifier')
 
 @bot.command(name='d8',
-             help="!d8")
+             help="!d8 (Rolls 1 d8)\n!d8 2 (Rolls 2 d8)\n!d8 8 5 (Rolls 8 d8 with +5 mod)")
 async def d8(ctx, *args):
     result = dice_math(8, *args)
     dice = result[0]
@@ -125,8 +125,8 @@ async def d8(ctx, *args):
         await ctx.send(f'{ctx.author.display_name} rolled: {dice}\nTotal: {mod_total} with {sign}{modifier} modifier')
 
 @bot.command(name='d10',
-             help="!d10")
-async def d8(ctx, *args):
+             help="!d10 (Rolls 1 d10)\n!d10 2 (Rolls 2 d10)\n!d10 10 5 (Rolls 10 d10 with +5 mod)")
+async def d10(ctx, *args):
     result = dice_math(10, *args)
     dice = result[0]
     total = result[1]
@@ -143,8 +143,8 @@ async def d8(ctx, *args):
         await ctx.send(f'{ctx.author.display_name} rolled: {dice}\nTotal: {mod_total} with {sign}{modifier} modifier')
 
 @bot.command(name='d12',
-             help="!d12")
-async def d8(ctx, *args):
+             help="!d12 (Rolls 1 d12)\n!d12 2 (Rolls 2 d12)\n!d12 12 5 (Rolls 12 d12 with +5 mod)")
+async def d12(ctx, *args):
     result = dice_math(12, *args)
     dice = result[0]
     total = result[1]
@@ -161,8 +161,8 @@ async def d8(ctx, *args):
         await ctx.send(f'{ctx.author.display_name} rolled: {dice}\nTotal: {mod_total} with {sign}{modifier} modifier')
 
 @bot.command(name='d20',
-             help="!d20")
-async def d8(ctx, *args):
+             help="!d20 (Rolls 1 d20)\n!d20 2 (Rolls 2 d20)\n!d20 20 5 (Rolls 20 d20 with +5 mod)")
+async def d20(ctx, *args):
     result = dice_math(20, *args)
     dice = result[0]
     total = result[1]
@@ -179,8 +179,8 @@ async def d8(ctx, *args):
         await ctx.send(f'{ctx.author.display_name} rolled: {dice}\nTotal: {mod_total} with {sign}{modifier} modifier')
 
 @bot.command(name='d100',
-             help="!d100")
-async def d8(ctx, *args):
+             help="!d100 (Rolls 1 d100)\n!d100 2 (Rolls 2 d100)\n!d100 100 5 (Rolls 100 d100 with +5 mod)")
+async def d100(ctx, *args):
     result = dice_math(100, *args)
     dice = result[0]
     total = result[1]
@@ -195,18 +195,5 @@ async def d8(ctx, *args):
         await ctx.send(f'{ctx.author.display_name} rolled: {dice}\nTotal: {total}')
     else:
         await ctx.send(f'{ctx.author.display_name} rolled: {dice}\nTotal: {mod_total} with {sign}{modifier} modifier')
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 bot.run(TOKEN)
