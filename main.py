@@ -10,8 +10,20 @@ GUILD = os.getenv('DISCORD_GUILD')
 
 intents = discord.Intents.default()
 intents.message_content = True
-bot = commands.Bot(command_prefix='!', intents=intents)
+bot = commands.Bot(command_prefix='!', intents=intents, help_command=None)
 
+@bot.command(name='help')
+async def help(ctx):
+    await ctx.send('List of Commands with Examples:\n'
+                   '!roll <# of dice> <# of sides\n'
+                   '!rollmod <# of sides> <# of modifier>\n'
+                   '!d3 <# of dice> <# of Modifier>\n'
+                   '!d6 <# of dice> <# of Modifier>\n'
+                   '!d8 <# of dice> <# of Modifier>\n'
+                   '!d10 <# of dice> <# of Modifier>\n'
+                   '!d12 <# of dice> <# of Modifier>\n'
+                   '!d20 <# of dice> <# of Modifier>\n'
+                   '!d100 <# of dice> <# of Modifier>\n')
 
 @bot.command(name='roll',
              help="ex: !roll 1 20 (This rolls 1 d20)\n"
@@ -200,8 +212,6 @@ async def d100(ctx, *args):
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        await ctx.send(f'{error}')
-        await ctx.send('!help')
-
+        await ctx.send(f'{error}. Type !help for list of commands')
 
 bot.run(TOKEN)
