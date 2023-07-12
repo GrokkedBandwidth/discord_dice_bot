@@ -12,6 +12,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents, help_command=None)
 
+# Redefine help command for clarity of each of the following commands
 @bot.command(name='help')
 async def help(ctx):
     await ctx.send('List of Commands with Examples:\n'
@@ -24,7 +25,7 @@ async def help(ctx):
                    '!d12 <# of dice> <# of Modifier>\n'
                    '!d20 <# of dice> <# of Modifier>\n'
                    '!d100 <# of dice> <# of Modifier>\n')
-
+# Deprecated
 @bot.command(name='roll',
              help="ex: !roll 1 20 (This rolls 1 d20)\n"
                   "ex: !roll 4 6 3 (This rolls 4d6 with a +7 modifier)")
@@ -47,6 +48,7 @@ async def roll(ctx,
                    f'Dice Total: {sum_dice}\n'
                    f'Modified Total: {sum_dice + modifier}')
 
+# Deprecated
 @bot.command(name='rollmod',
              help="ex: !rollmod 20 3 (This rolls 1 d20 with +3 modifier)")
 async def rollmod(ctx,
@@ -60,12 +62,15 @@ async def rollmod(ctx,
     mod_dice = int(unmod_dice) + mod
     await ctx.send(f'{ctx.author.display_name} rolled a {mod_dice}\n {unmod_dice} with {mod_symbol}{mod} modifier')
 
+# Function to be called for generated number of dice and the number of their sides from the !d# commands
 def generate_dice(num_side, num_dice):
     dice = []
     for num in range(num_dice):
         dice.append(random.choice(range(1, num_side + 1)))
     return dice
 
+# Function called after dice are generated to add dice together if there is more than one and to add any player
+# given modifiers
 def dice_math(num_side, *args):
     num_of_dice = 1
     modifier = 0
@@ -83,6 +88,8 @@ def dice_math(num_side, *args):
     mod_total = total + modifier
     return dice, total, mod_total, modifier
 
+# Following commands are dice commands that specifically correspond to the most common dice used in TTRPGs
+# Each command, if executed with no args, will roll a single dice of its side d# without a modifier
 @bot.command(name='d3',
              help="!d3 (Rolls 1 d3)\n!d3 2 (Rolls 2 d3)\n!d3 3 5 (Rolls 3 d3 with +5 mod)")
 async def d3(ctx, *args):
