@@ -19,6 +19,7 @@ async def help(ctx):
                    '!roll <# of dice> <# of sides\n'
                    '!rollmod <# of sides> <# of modifier>\n'
                    '!d3 <# of dice> <# of Modifier>\n'
+                   '!d4 <# of dice> <# of Modifier>\n'
                    '!d6 <# of dice> <# of Modifier>\n'
                    '!d8 <# of dice> <# of Modifier>\n'
                    '!d10 <# of dice> <# of Modifier>\n'
@@ -94,6 +95,24 @@ def dice_math(num_side, *args):
              help="!d3 (Rolls 1 d3)\n!d3 2 (Rolls 2 d3)\n!d3 3 5 (Rolls 3 d3 with +5 mod)")
 async def d3(ctx, *args):
     result = dice_math(3, *args)
+    dice = result[0]
+    total = result[1]
+    mod_total = result[2]
+    modifier = result[3]
+    sign = '+'
+    if modifier < 0:
+        sign = ''
+    if dice[0] == total and total == mod_total:
+        await ctx.send(f'{ctx.author.display_name} rolled: {dice}')
+    elif total == mod_total:
+        await ctx.send(f'{ctx.author.display_name} rolled: {dice}\nTotal: {total}')
+    else:
+        await ctx.send(f'{ctx.author.display_name} rolled: {dice}\nTotal: {mod_total} with {sign}{modifier} modifier')
+
+@bot.command(name='d4',
+             help="!d4 (Rolls 1 d4)\n!d3 2 (Rolls 2 d4)\n!d4 3 5 (Rolls 3 d4 with +5 mod)")
+async def d4(ctx, *args):
+    result = dice_math(4, *args)
     dice = result[0]
     total = result[1]
     mod_total = result[2]
