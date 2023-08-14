@@ -25,6 +25,7 @@ async def help(ctx):
                    '!d10 <# of dice> <# of Modifier>\n'
                    '!d12 <# of dice> <# of Modifier>\n'
                    '!d20 <# of dice> <# of Modifier>\n'
+                   '!d20 optional: adv or dis'
                    '!d100 <# of dice> <# of Modifier>\n')
 # Deprecated
 @bot.command(name='roll',
@@ -80,9 +81,9 @@ def dice_math(num_side, *args):
             num_of_dice = int(args[0])
             try:
                 modifier = int(args[1])
-            except IndexError:
+            except IndexError or ValueError:
                 pass
-        except IndexError:
+        except IndexError or ValueError:
             pass
     dice = generate_dice(num_side, num_of_dice)
     total = sum(dice)
@@ -200,8 +201,24 @@ async def d12(ctx, *args):
         await ctx.send(f'{ctx.author.display_name} rolled: {dice}\nTotal: {mod_total} with {sign}{modifier} modifier')
 
 @bot.command(name='d20',
-             help="!d20 (Rolls 1 d20)\n!d20 2 (Rolls 2 d20)\n!d20 20 5 (Rolls 20 d20 with +5 mod)")
+             help="!d20 (Rolls 1 d20)\n!d20 2 (Rolls 2 d20)\n!d20 20 5 (Rolls 20 d20 with +5 mod)"
+                  "\n!d20 adv 5 (Rolls 1 d20 with advantage and +5 modifier")
 async def d20(ctx, *args):
+    adv = False
+    dis = False
+    if "adv" in args or "dis" in args:
+        if "adv" in args:
+            adv = True
+        elif "dis" in args:
+            dis = True
+        args = [item for item in args if "adv" != item and "dis" != item]
+        if len(args) == 1:
+            args.append(args[0])
+            args[0] = 1
+
+    if adv and dis:
+        adv = False
+        dis = False
     result = dice_math(20, *args)
     dice = result[0]
     total = result[1]
@@ -210,7 +227,25 @@ async def d20(ctx, *args):
     sign = '+'
     if modifier < 0:
         sign = ''
-    if dice[0] == total and total == mod_total:
+    if adv:
+        result2 = dice_math(20, *args)
+        dice2 = result2[0]
+        if dice2 > dice:
+            mod_total = result2[2]
+            modifier = result2[3]
+        await ctx.send(f'{ctx.author.display_name} rolled: {dice}, {dice2} with advantage\nTotal: '
+                       f'{mod_total} with {sign}{modifier} modifier')
+
+    elif dis:
+        result2 = dice_math(20, *args)
+        dice2 = result2[0]
+        if dice2 < dice:
+            mod_total = result2[2]
+            modifier = result2[3]
+        await ctx.send(f'{ctx.author.display_name} rolled: {dice}, {dice2} with disadvantage\nTotal: '
+                       f'{mod_total} with {sign}{modifier} modifier')
+
+    elif dice[0] == total and total == mod_total:
         await ctx.send(f'{ctx.author.display_name} rolled: {dice}')
     elif total == mod_total:
         await ctx.send(f'{ctx.author.display_name} rolled: {dice}\nTotal: {total}')
@@ -241,3 +276,4 @@ async def on_command_error(ctx, error):
         await ctx.send(f'{error}. Type !help for list of commands')
 
 bot.run(TOKEN)
+
