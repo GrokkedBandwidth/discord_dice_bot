@@ -4,6 +4,10 @@ from dotenv import load_dotenv
 from discord.ext import commands
 import random
 
+
+with open("insults.csv", mode="r") as file:
+    insults = file.readlines()
+
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
@@ -24,8 +28,8 @@ async def help(ctx):
                    '!d8 <# of dice> <# of Modifier>\n'
                    '!d10 <# of dice> <# of Modifier>\n'
                    '!d12 <# of dice> <# of Modifier>\n'
-                   '!d20 <# of dice> <# of Modifier>\n'
-                   '!d20 optional: adv or dis'
+                   '!d20 <# of Modifier>\n'
+                   '!d20 <dis or adv> <# of Modifier>\n'
                    '!d100 <# of dice> <# of Modifier>\n')
 # Deprecated
 @bot.command(name='roll',
@@ -76,7 +80,9 @@ def generate_dice(num_side, num_dice):
 def dice_math(num_side, *args):
     num_of_dice = 1
     modifier = 0
-    if args:
+    if args and num_side == 20:
+        modifier = int(args[0])
+    elif args:
         try:
             num_of_dice = int(args[0])
             try:
@@ -207,14 +213,12 @@ async def d20(ctx, *args):
     adv = False
     dis = False
     if "adv" in args or "dis" in args:
+
         if "adv" in args:
             adv = True
         elif "dis" in args:
             dis = True
         args = [item for item in args if "adv" != item and "dis" != item]
-        if len(args) == 1:
-            args.append(args[0])
-            args[0] = 1
 
     if adv and dis:
         adv = False
@@ -235,7 +239,6 @@ async def d20(ctx, *args):
             modifier = result2[3]
         await ctx.send(f'{ctx.author.display_name} rolled: {dice}, {dice2} with advantage\nTotal: '
                        f'{mod_total} with {sign}{modifier} modifier')
-
     elif dis:
         result2 = dice_math(20, *args)
         dice2 = result2[0]
@@ -269,6 +272,11 @@ async def d100(ctx, *args):
         await ctx.send(f'{ctx.author.display_name} rolled: {dice}\nTotal: {total}')
     else:
         await ctx.send(f'{ctx.author.display_name} rolled: {dice}\nTotal: {mod_total} with {sign}{modifier} modifier')
+
+@bot.command(name="insult")
+async def insult(ctx):
+    joke = random.choice(insults)
+    await ctx.send(f'{ctx.author.display_name} says: {joke}')
 
 @bot.event
 async def on_command_error(ctx, error):
