@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 from discord.ext import commands
 import random
 
-
 with open("insults.csv", mode="r") as file:
     insults = file.readlines()
 
@@ -19,14 +18,6 @@ bot = discord.Bot()
 @bot.event
 async def on_ready():
     print(f"{bot.user} is ready and online!")
-
-@bot.slash_command(name = "hello", description = "Say hello to the bot")
-async def hello(ctx):
-    await ctx.respond("Hey!")
-
-
-
-
 
 #### Menu Test
 
@@ -45,29 +36,35 @@ class MyView(discord.ui.View):
         max_values=1,
         options=[
             discord.SelectOption(
-                label="d20",
+                label="Dice: d20",
                 description="Twenty sided die",
-                default=True
+                default=True,
+                value="d20"
             ),
             discord.SelectOption(
-                label="d6",
-                description="Six sided die"
+                label="Dice: d6",
+                description="Six sided die",
+                value="d6"
             ),
             discord.SelectOption(
-                label="d8",
-                description="Eight sided die"
+                label="Dice: d8",
+                description="Eight sided die",
+                value="d8"
             ),
             discord.SelectOption(
-                label="d10",
-                description="Ten sided die"
+                label="Dice: d10",
+                description="Ten sided die",
+                value="d10"
             ),
             discord.SelectOption(
-                label="d12",
-                description="Twelve sided die"
+                label="Dice: d12",
+                description="Twelve sided die",
+                value="d12"
             ),
             discord.SelectOption(
-                label="d100",
-                description="Hundred sided die"
+                label="Dice: d100",
+                description="Hundred sided die",
+                value="d100"
             ),
         ]
     )
@@ -80,16 +77,16 @@ class MyView(discord.ui.View):
         min_values=1,
         max_values=1,
         options=[
-            discord.SelectOption(label="1", default=True),
-            discord.SelectOption(label="2"),
-            discord.SelectOption(label="3"),
-            discord.SelectOption(label="4"),
-            discord.SelectOption(label="5"),
-            discord.SelectOption(label="6"),
-            discord.SelectOption(label="7"),
-            discord.SelectOption(label="8"),
-            discord.SelectOption(label="9"),
-            discord.SelectOption(label="10"),
+            discord.SelectOption(label="Number: 1", default=True, value="1"),
+            discord.SelectOption(label="Number: 2", value="2"),
+            discord.SelectOption(label="Number: 3", value="3"),
+            discord.SelectOption(label="Number: 4", value="4"),
+            discord.SelectOption(label="Number: 5", value="5"),
+            discord.SelectOption(label="Number: 6", value="6"),
+            discord.SelectOption(label="Number: 7", value="7"),
+            discord.SelectOption(label="Number: 8", value="8"),
+            discord.SelectOption(label="Number: 9", value="9"),
+            discord.SelectOption(label="Number: 10", value="10"),
         ]
     )
     async def number_callback(self, select, interaction):
@@ -101,34 +98,31 @@ class MyView(discord.ui.View):
         min_values=1,
         max_values=1,
         options=[
-            discord.SelectOption(label="-5"),
-            discord.SelectOption(label="-4"),
-            discord.SelectOption(label="-3"),
-            discord.SelectOption(label="-2"),
-            discord.SelectOption(label="-1"),
-            discord.SelectOption(label="+0", default=True),
-            discord.SelectOption(label="+1"),
-            discord.SelectOption(label="+2"),
-            discord.SelectOption(label="+3"),
-            discord.SelectOption(label="+4"),
-            discord.SelectOption(label="+5"),
-            discord.SelectOption(label="+6"),
-            discord.SelectOption(label="+7"),
-            discord.SelectOption(label="+8"),
-            discord.SelectOption(label="+9"),
-            discord.SelectOption(label="+10"),
-            discord.SelectOption(label="+11"),
-            discord.SelectOption(label="+12"),
-            discord.SelectOption(label="+13"),
-            discord.SelectOption(label="+14"),
-            discord.SelectOption(label="+15"),
+            discord.SelectOption(label="Modifier: -5", value="-5"),
+            discord.SelectOption(label="Modifier: -4", value="-4"),
+            discord.SelectOption(label="Modifier: -3", value="-3"),
+            discord.SelectOption(label="Modifier: -2", value="-2"),
+            discord.SelectOption(label="Modifier: -1", value="-1"),
+            discord.SelectOption(label="Modifier: +0", default=True, value="0"),
+            discord.SelectOption(label="Modifier: +1", value="1"),
+            discord.SelectOption(label="Modifier: +2", value="2"),
+            discord.SelectOption(label="Modifier: +3", value="3"),
+            discord.SelectOption(label="Modifier: +4", value="4"),
+            discord.SelectOption(label="Modifier: +5", value="5"),
+            discord.SelectOption(label="Modifier: +6", value="6"),
+            discord.SelectOption(label="Modifier: +7", value="7"),
+            discord.SelectOption(label="Modifier: +8", value="8"),
+            discord.SelectOption(label="Modifier: +9", value="9"),
+            discord.SelectOption(label="Modifier: +10", value="10"),
+            discord.SelectOption(label="Modifier: +11", value="11"),
+            discord.SelectOption(label="Modifier: +12", value="12"),
+            discord.SelectOption(label="Modifier: +13", value="13"),
+            discord.SelectOption(label="Modifier: +14", value="14"),
+            discord.SelectOption(label="Modifier: +15", value="15"),
         ]
     )
     async def modifier_callback(self, select, interaction):
-        if select.values[0][1] == "-":
-            self.mod = int(select.values[0])
-        else:
-            self.mod = int(select.values[0][1:])
+        self.mod = int(select.values[0])
 
     @discord.ui.select(
         placeholder="Choose number of dice",
@@ -136,9 +130,9 @@ class MyView(discord.ui.View):
         min_values=1,
         max_values=1,
         options=[
-            discord.SelectOption(label="Regular", default=True),
-            discord.SelectOption(label="Advantage"),
-            discord.SelectOption(label="Disadvantage"),
+            discord.SelectOption(label="Type: Regular", default=True, value="Regular"),
+            discord.SelectOption(label="Type: Advantage", value="Advantage"),
+            discord.SelectOption(label="Type: Disadvantage", value="Disadvantage"),
         ]
     )
     async def roll_type_callback(self, select, interaction):
@@ -147,16 +141,32 @@ class MyView(discord.ui.View):
     @discord.ui.button(label="Roll!", row=4, style=discord.ButtonStyle.primary)
     async def dice_roll_callback(self, button, interaction):
         dice = dice_math(num_side=self.side, num_of_dice=self.number, mod=self.mod, type=self.type)
-        print(dice)
-        if dice[1] == dice[2]:
-            await interaction.response.send_message(f"{interaction.user.name} rolled:")
+        dice_list = dice[0]
+        total = dice[1]
+        mod_total = dice[2]
+        mod = dice[3]
+        symbol = "+"
+        if mod < 0:
+            symbol = ""
+        if self.type != "Regular":
+            if self.mod == 0:
+                await interaction.response.send_message(
+                    f"{interaction.user.name} rolled {dice_list} with {self.type}\nTotal: {total}"
+                )
+            else:
+                await interaction.response.send_message(
+                    f"{interaction.user.name} rolled {dice_list} with {self.type}\nTotal: {mod_total}\n{total} with {symbol}{mod}")
+        elif mod == 0:
+            await interaction.response.send_message(
+                f"{interaction.user.name} rolled {dice_list}\nTotal: {total}")
+
+        else:
+            await interaction.response.send_message(
+                f"{interaction.user.name} rolled {dice_list}\nTotal: {mod_total}\n{total} with {symbol}{mod}")
 
 @bot.command()
 async def dice(ctx):
     await ctx.send("Choose your dice", view=MyView())
-
-#### Menu Test End
-
 
 def generate_dice(num_side, num_dice):
     dice = []
@@ -165,11 +175,23 @@ def generate_dice(num_side, num_dice):
     return dice
 
 def dice_math(num_side, num_of_dice, mod, type):
-    modifier = mod
-    dice = generate_dice(num_side, num_of_dice)
-    total = sum(dice)
-    mod_total = total + modifier
-    return dice, total, mod_total, modifier
+    if type == "Advantage" or type == "Disadvantage":
+        die1 = generate_dice(num_side, 1)[0]
+        die2 = generate_dice(num_side, 1)[0]
+        if type == "Advantage":
+            dice = [die1, die2]
+            total = max(die1, die2)
+            mod_total = total + mod
+        else:
+            dice = [die1, die2]
+            total = min(die1, die2)
+            mod_total = total + mod
+        return dice, total, mod_total, mod
+    else:
+        dice = generate_dice(num_side, num_of_dice)
+        total = sum(dice)
+        mod_total = total + mod
+        return dice, total, mod_total, mod
 
 # Following commands are dice commands that specifically correspond to the most common dice used in TTRPGs
 # Each command, if executed with no args, will roll a single dice of its side d# without a modifier
