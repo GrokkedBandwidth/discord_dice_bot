@@ -167,6 +167,11 @@ class MyView(discord.ui.View):
 async def dice(ctx):
     await ctx.send("Choose your dice", view=MyView())
 
+@bot.command()
+async def insult(ctx):
+    insult = random.choice(insults)
+    await ctx.send(f"{ctx.author.name}: {insult}")
+
 def generate_dice(num_side, num_dice):
     dice = []
     for num in range(num_dice):
