@@ -151,18 +151,18 @@ class MyView(discord.ui.View):
         if self.type != "Regular":
             if self.mod == 0:
                 await interaction.response.send_message(
-                    f"{interaction.user.name} rolled {dice_list} with {self.type}\nTotal: {total}"
+                    f"{interaction.user.name} rolled {dice_list} on a d{self.side} with {self.type}\nTotal: {total}"
                 )
             else:
                 await interaction.response.send_message(
-                    f"{interaction.user.name} rolled {dice_list} with {self.type}\nTotal: {mod_total}\n{total} with {symbol}{mod}")
+                    f"{interaction.user.name} rolled {dice_list} on a d{self.number} with {self.type}\nTotal: {mod_total}\n{total} with {symbol}{mod}")
         elif mod == 0:
             await interaction.response.send_message(
-                f"{interaction.user.name} rolled {dice_list}\nTotal: {total}")
+                f"{interaction.user.name} rolled {dice_list} on a d{self.number}\nTotal: {total}")
 
         else:
             await interaction.response.send_message(
-                f"{interaction.user.name} rolled {dice_list}\nTotal: {mod_total}\n{total} with {symbol}{mod}")
+                f"{interaction.user.name} rolled {dice_list} on a d{self.number}\nTotal: {mod_total}\n{total} with {symbol}{mod}")
 
 @bot.command()
 async def dice(ctx):
