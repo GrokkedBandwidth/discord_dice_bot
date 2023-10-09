@@ -150,18 +150,18 @@ class MyView(discord.ui.View):
         if self.type != "Regular":
             if self.mod == 0:
                 await interaction.response.send_message(
-                    f"{interaction.user.name} rolled {dice_list} on a d{self.side} with {self.type}\nTotal: {total}"
+                    f"{interaction.user.nick} rolled {dice_list} on a d{self.side} with {self.type}\nTotal: {total}"
                 )
             else:
                 await interaction.response.send_message(
-                    f"{interaction.user.name} rolled {dice_list} on a d{self.side} with {self.type}\nTotal: {mod_total}\n{total} with {symbol}{mod}")
+                    f"{interaction.user.nick} rolled {dice_list} on a d{self.side} with {self.type}\nTotal: {mod_total}\n{total} with {symbol}{mod}")
         elif mod == 0:
             await interaction.response.send_message(
-                f"{interaction.user.name} rolled {dice_list} on a d{self.side}\nTotal: {total}")
+                f"{interaction.user.nick} rolled {dice_list} on a d{self.side}\nTotal: {total}")
 
         else:
             await interaction.response.send_message(
-                f"{interaction.user.name} rolled {dice_list} on a d{self.side}\nTotal: {mod_total}\n{total} with {symbol}{mod}")
+                f"{interaction.user.nick} rolled {dice_list} on a d{self.side}\nTotal: {mod_total}\n{total} with {symbol}{mod}")
 
 @bot.command()
 async def dice(ctx):
@@ -170,7 +170,7 @@ async def dice(ctx):
 @bot.command()
 async def insult(ctx):
     insult = random.choice(insults)
-    await ctx.send(f"{ctx.author.name}: {insult}")
+    await ctx.send(f"{ctx.author.nick}: {insult}")
 
 def generate_dice(num_side, num_dice):
     dice = []
