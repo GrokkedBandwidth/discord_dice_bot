@@ -41,6 +41,11 @@ class MyView(discord.ui.View):
                 value="d20"
             ),
             discord.SelectOption(
+                label="Dice: d4",
+                description="Four sided die",
+                value="d4"
+            ),
+            discord.SelectOption(
                 label="Dice: d6",
                 description="Six sided die",
                 value="d6"
@@ -97,17 +102,17 @@ class MyView(discord.ui.View):
         min_values=1,
         max_values=1,
         options=[
-            discord.SelectOption(label="Modifier: -5", value="-5"),
-            discord.SelectOption(label="Modifier: -4", value="-4"),
-            discord.SelectOption(label="Modifier: -3", value="-3"),
-            discord.SelectOption(label="Modifier: -2", value="-2"),
-            discord.SelectOption(label="Modifier: -1", value="-1"),
             discord.SelectOption(label="Modifier: +0", default=True, value="0"),
             discord.SelectOption(label="Modifier: +1", value="1"),
             discord.SelectOption(label="Modifier: +2", value="2"),
             discord.SelectOption(label="Modifier: +3", value="3"),
             discord.SelectOption(label="Modifier: +4", value="4"),
             discord.SelectOption(label="Modifier: +5", value="5"),
+            discord.SelectOption(label="Modifier: -5", value="-5"),
+            discord.SelectOption(label="Modifier: -4", value="-4"),
+            discord.SelectOption(label="Modifier: -3", value="-3"),
+            discord.SelectOption(label="Modifier: -2", value="-2"),
+            discord.SelectOption(label="Modifier: -1", value="-1"),
             discord.SelectOption(label="Modifier: +6", value="6"),
             discord.SelectOption(label="Modifier: +7", value="7"),
             discord.SelectOption(label="Modifier: +8", value="8"),
