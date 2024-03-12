@@ -22,7 +22,7 @@ async def on_ready():
 
 class MyView(discord.ui.View):
     def __init__(self):
-        super().__init__()
+        super().__init__(timeout=None)
         self.side = 20
         self.number = 1
         self.mod = 0
