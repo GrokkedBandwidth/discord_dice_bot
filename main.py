@@ -28,6 +28,12 @@ class MyView(discord.ui.View):
         self.mod = 0
         self.type = "Regular"
 
+    def clear_dice(self):
+        self.side = 20
+        self.number = 1
+        self.mod = 0
+        self.type = "Regular"
+
     @discord.ui.select(
         placeholder="Choose a die!",
         row=0,
@@ -167,6 +173,8 @@ class MyView(discord.ui.View):
         else:
             await interaction.response.send_message(
                 f"{interaction.user.nick} rolled {dice_list} on a d{self.side}\nTotal: {mod_total}\n{total} with {symbol}{mod}")
+        self.clear_dice()
+
 
 @bot.command()
 async def dice(ctx):
