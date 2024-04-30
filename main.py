@@ -20,6 +20,16 @@ async def on_ready():
 
 #### Menu Test
 
+class Player:
+    def __init__(self):
+        super().__init__()
+        self.name = ""
+        self.side = 20
+        self.number = 1
+        self.mod = 0
+        self.type = "Regular"
+
+
 class MyView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
@@ -27,15 +37,22 @@ class MyView(discord.ui.View):
         self.number = 1
         self.mod = 0
         self.type = "Regular"
+        self.players = []
 
-    def clear_dice(self):
-        self.side = 20
-        self.number = 1
-        self.mod = 0
-        self.type = "Regular"
+    def create_player(self, name):
+        player = Player()
+        player.name = name
+        self.players.append(player)
+
+    def find_player(self, name):
+        for item in self.players:
+            if item.name == name:
+                return item
+        self.create_player(name=name)
+        return self.players[-1]
 
     @discord.ui.select(
-        placeholder="Choose a die!",
+        placeholder="",
         row=0,
         min_values=1,
         max_values=1,
@@ -78,8 +95,9 @@ class MyView(discord.ui.View):
             ),
         ]
     )
-    async def die_callback(self, select, interaction):
-        self.side = int(select.values[0][1:])
+    async def die_callback(self, select: discord.ui.Select, interaction):
+        player = self.find_player(name=interaction.user.nick)
+        player.side = int(select.values[0][1:])
 
     @discord.ui.select(
         placeholder="Choose number of dice",
@@ -87,7 +105,7 @@ class MyView(discord.ui.View):
         min_values=1,
         max_values=1,
         options=[
-            discord.SelectOption(label="Number: 1", default=True, value="1"),
+            discord.SelectOption(label="Number: 1", value="1", default=True),
             discord.SelectOption(label="Number: 2", value="2"),
             discord.SelectOption(label="Number: 3", value="3"),
             discord.SelectOption(label="Number: 4", value="4"),
@@ -100,7 +118,8 @@ class MyView(discord.ui.View):
         ]
     )
     async def number_callback(self, select, interaction):
-        self.number = int(select.values[0])
+        player = self.find_player(name=interaction.user.nick)
+        player.number = int(select.values[0])
 
     @discord.ui.select(
         placeholder="Choose number of dice",
@@ -132,7 +151,8 @@ class MyView(discord.ui.View):
         ]
     )
     async def modifier_callback(self, select, interaction):
-        self.mod = int(select.values[0])
+        player = self.find_player(name=interaction.user.nick)
+        player.mod = int(select.values[0])
 
     @discord.ui.select(
         placeholder="Choose number of dice",
@@ -146,11 +166,13 @@ class MyView(discord.ui.View):
         ]
     )
     async def roll_type_callback(self, select, interaction):
-        self.type = select.values[0]
+        player = self.find_player(name=interaction.user.nick)
+        player.type = select.values[0]
 
     @discord.ui.button(label="Roll!", row=4, style=discord.ButtonStyle.primary)
     async def dice_roll_callback(self, button, interaction):
-        dice = dice_math(num_side=self.side, num_of_dice=self.number, mod=self.mod, type=self.type)
+        player = self.find_player(name=interaction.user.nick)
+        dice = dice_math(num_side=player.side, num_of_dice=player.number, mod=player.mod, type=player.type)
         dice_list = dice[0]
         total = dice[1]
         mod_total = dice[2]
@@ -158,22 +180,22 @@ class MyView(discord.ui.View):
         symbol = "+"
         if mod < 0:
             symbol = ""
-        if self.type != "Regular":
-            if self.mod == 0:
+        if player.type != "Regular":
+            if player.mod == 0:
                 await interaction.response.send_message(
-                    f"{interaction.user.nick} rolled {dice_list} on a d{self.side} with {self.type}\nTotal: {total}"
+                    f"{interaction.user.nick} rolled {dice_list} on a d{player.side} with {player.type}\nTotal: {total}"
                 )
             else:
                 await interaction.response.send_message(
-                    f"{interaction.user.nick} rolled {dice_list} on a d{self.side} with {self.type}\nTotal: {mod_total}\n{total} with {symbol}{mod}")
+                    f"{interaction.user.nick} rolled {dice_list} on a d{player.side} with {player.type}\nTotal: {mod_total}\n{total} with {symbol}{mod}")
         elif mod == 0:
             await interaction.response.send_message(
-                f"{interaction.user.nick} rolled {dice_list} on a d{self.side}\nTotal: {total}")
+                f"{interaction.user.nick} rolled {dice_list} on a d{player.side}\nTotal: {total}")
 
         else:
             await interaction.response.send_message(
-                f"{interaction.user.nick} rolled {dice_list} on a d{self.side}\nTotal: {mod_total}\n{total} with {symbol}{mod}")
-        self.clear_dice()
+                f"{interaction.user.nick} rolled {dice_list} on a d{player.side}\nTotal: {mod_total}\n{total} with {symbol}{mod}")
+        #self.clear_dice()
 
 
 @bot.command()
